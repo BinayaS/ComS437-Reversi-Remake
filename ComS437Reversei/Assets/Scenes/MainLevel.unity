@@ -1605,6 +1605,8 @@ MonoBehaviour:
   point_00: {fileID: 488137228}
   validMovePoint: {fileID: 7679702692487951188, guid: 09978d61715493e4c8bdace2f10bd844,
     type: 3}
+  validAIMovePoint: {fileID: 9134185370691675172, guid: 6204525495ae1ce40aba9dfeee2c585f,
+    type: 3}
 --- !u!1001 &477483287
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -10,9 +10,11 @@ public class GameBoardController : MonoBehaviour
     public static int[,] boardData = new int[8,8];
     public GameObject point_00;
     public GameObject validMovePoint;
+    public GameObject validAIMovePoint;
     public static Vector3 boardOffset = new Vector3(-4.0f, 1.5f, -4.0f);
     public static Vector3 pieceOffset = new Vector3(0.0f, 0.5f, 0.0f);
     private static bool showVM = false;
+    public static bool isPlayerTurn = true;
 
     // Start is called before the first frame update
     void Start()
@@ -31,15 +33,17 @@ public class GameBoardController : MonoBehaviour
         boardData[4, 3] = 1;
         boardData[7, 7] = 0;
 
-        MinMax.FindValidMoves();
-        showValidMoves();
+        MinMax.FindValidMoves(MinMax.PlayerColor);
+        showValidMoves(MinMax.PlayerColor, true);
+        //MinMax.FindValidMoves(MinMax.AIColor);
+        //showValidMoves(MinMax.AIColor, false);
     }
 
     public bool isEmpty(int x, int y) {
         //Debug.Log("X: " + x);
        //Debug.Log("Y: " + y);
         //Debug.Log(boardData[x, y]);
-        if(boardData[x,y] == 0 || boardData[x,y] == 2) {
+        if(boardData[x,y] == 0 || boardData[x,y] == 2 || boardData[x,y] == 3) {
             return true;
         }
         return false;
@@ -80,7 +84,7 @@ public class GameBoardController : MonoBehaviour
         else {
             boardData[a[0, 0], a[0, 1]] = 1;
         }
-        MinMax.FindValidMoves();
+        MinMax.FindValidMoves(MinMax.PlayerColor);
         showVM = true;
     }
 
@@ -89,13 +93,20 @@ public class GameBoardController : MonoBehaviour
 
     }
 
-    public void showValidMoves()
+    public static void removeValidMoveGhosts()
     {
-
         GameObject[] validMovesOnBoard = GameObject.FindGameObjectsWithTag("ValidMove");
-        for(int i = 0; i < validMovesOnBoard.Length; i++)
+        for (int i = 0; i < validMovesOnBoard.Length; i++)
         {
             Destroy(validMovesOnBoard[i]);
+        }
+    }
+
+    public void showValidMoves(int color, bool removePrevious)
+    {
+        if(removePrevious)
+        {
+            removeValidMoveGhosts();
         }
 
         for (int i = 0; i <= 7; i++)
@@ -105,7 +116,11 @@ public class GameBoardController : MonoBehaviour
                 if(boardData[i,j] == 2)
                 {
                     float[,] temp = TranslateToGameData(i, j);
-                    Instantiate(validMovePoint, new Vector3(temp[0,0], 1.1f, temp[0,1]), Quaternion.identity);
+                    Instantiate(validMovePoint, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
+                } else if(boardData[i, j] == 3)
+                {
+                    float[,] temp = TranslateToGameData(i, j);
+                    Instantiate(validAIMovePoint, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
                 }
             }
         }
@@ -127,7 +142,7 @@ public class GameBoardController : MonoBehaviour
             }
             */
 
-            if (isValidMove(a[0, 0], a[0, 1]))
+            if (isValidMove(a[0, 0], a[0, 1]) && isPlayerTurn)
             {
                 DragObject.canPlace = true;
             }
@@ -139,10 +154,12 @@ public class GameBoardController : MonoBehaviour
             //Debug.Log(DragObject.canPlace);
         }
 
-        if(showVM)
+        if(showVM && isPlayerTurn)
         {
             showVM = false;
-            showValidMoves();
+            showValidMoves(MinMax.PlayerColor, true);
+            //MinMax.FindValidMoves(MinMax.AIColor);
+            //showValidMoves(MinMax.AIColor, false);
         }
     }
 }
