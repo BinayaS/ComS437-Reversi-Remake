@@ -5,19 +5,20 @@ using UnityEngine;
 public class DragObject : MonoBehaviour
 {
     public bool canPickup;
+    public static bool canPlace = false;
     private Vector3 mOffset;
     private float mZCoord;
-    public GameObject ghostPieceBlack;
-    public GameObject ghostPieceWhite;
+    public GameObject ghostPiece;
     public Vector3 originalPlace;
     public MeshCollider physicsCollider;
     public Rigidbody rb;
+    public static Vector3 placingLocation;
+    private float setHeight = -10f;
 
     void Start()
     {
         //canPickup = true;
-        ghostPieceBlack.transform.position = new Vector3(0f, -100f, 0f);
-        ghostPieceWhite.transform.position = new Vector3(0f, -100f, 0f);
+        ghostPiece.transform.position = new Vector3(0f, setHeight, 0f);
         physicsCollider = GetComponent<MeshCollider>();
         rb = GetComponent<Rigidbody>();
     }
@@ -30,7 +31,7 @@ public class DragObject : MonoBehaviour
             physicsCollider.enabled = false;
         } else
         {
-            rb.useGravity = true;
+            rb.useGravity = false;
             physicsCollider.enabled = true;
         }
     }
@@ -56,18 +57,19 @@ public class DragObject : MonoBehaviour
         if(canPickup == true)
         {
             PieceValueController.isPickedUp = false;
-            if (ghostPieceBlack.transform.position == new Vector3(0f, -100f, 0f))
+            if (canPlace == false)
             {
+                Debug.Log(originalPlace);
                 gameObject.transform.position = originalPlace;
             }
             else
             {
-                gameObject.transform.position = ghostPieceBlack.transform.position;
+                gameObject.transform.position = ghostPiece.transform.position;
+                GameBoardController.updateBoardData();
+                canPickup = false;
             }
-
-            ghostPieceBlack.transform.position = new Vector3(0f, -100f, 0f);
-            ghostPieceWhite.transform.position = new Vector3(0f, -100f, 0f);
         }
+        ghostPiece.transform.position = new Vector3(0f, setHeight, 0f);
     }
 
     private void OnMouseDrag() {
@@ -80,9 +82,11 @@ public class DragObject : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.name != "Model_Board" && other.name != "Plane" && canPickup == true)
+        if(other.tag != "Non_Placeable" && other.tag != "Piece" && canPickup == true)
         {
-            ghostPieceBlack.transform.position = other.transform.position;
+            ghostPiece.transform.position = other.transform.position;
+            ghostPiece.transform.position = new Vector3(ghostPiece.transform.position.x, 1.1f, ghostPiece.transform.position.z);
+            placingLocation = ghostPiece.transform.position;
         }
     }
 }

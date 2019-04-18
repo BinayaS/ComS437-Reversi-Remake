@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8615438505948984889}
   m_Layer: 0
   m_Name: Model_Piece_Ghost
-  m_TagString: Untagged
+  m_TagString: Non_Placeable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
