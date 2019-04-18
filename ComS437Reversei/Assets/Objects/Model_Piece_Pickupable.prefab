@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 6703739627116806065}
   - component: {fileID: 6703739627116806064}
   - component: {fileID: 6703739627116806071}
-  - component: {fileID: 6703739627116806069}
   - component: {fileID: 4277845006572659558}
   m_Layer: 0
   m_Name: Model_Piece_Pickupable
@@ -149,18 +148,9 @@ MonoBehaviour:
   originalPlace: {x: 0, y: 0, z: 0}
   physicsCollider: {fileID: 0}
   rb: {fileID: 0}
---- !u!114 &6703739627116806069
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6703739627116806068}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd7250a03cc21ba4a9796a5dcb0152ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  isBlack: 0
+  setWhite: 0
 --- !u!65 &4277845006572659558
 BoxCollider:
   m_ObjectHideFlags: 0

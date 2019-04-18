@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Non_Placeable
   - Piece
+  - Fire
+  - ValidMove
   layers:
   - Default
   - TransparentFX

@@ -15,12 +15,27 @@ public class DragObject : MonoBehaviour
     public static Vector3 placingLocation;
     private float setHeight = -10f;
 
+    public Animator anim;
+    public static bool isPickedUp = false;
+    public bool isBlack;
+    public bool setWhite = false;
+
     void Start()
     {
-        //canPickup = true;
         ghostPiece.transform.position = new Vector3(0f, setHeight, 0f);
         physicsCollider = GetComponent<MeshCollider>();
         rb = GetComponent<Rigidbody>();
+
+        anim = GetComponent<Animator>();
+        if (setWhite)
+        {
+            isBlack = false;
+        }
+        else
+        {
+            isBlack = true;
+        }
+        anim.SetBool("isBlack", isBlack);
     }
 
     void Update()
@@ -36,6 +51,23 @@ public class DragObject : MonoBehaviour
         }
     }
 
+    public void FlipToWhite()
+    {
+        isBlack = false;
+        UpdateAnim();
+    }
+
+    public void FlipToBlack()
+    {
+        isBlack = true;
+        UpdateAnim();
+    }
+
+    public void UpdateAnim()
+    {
+        anim.SetBool("isBlack", isBlack);
+    }
+
     Vector3 GetMouseWorldPos() {
         Vector3 mousePoint = Input.mousePosition;
         mousePoint.z = mZCoord;
@@ -47,7 +79,7 @@ public class DragObject : MonoBehaviour
         {
             mZCoord = Camera.main.WorldToScreenPoint(gameObject.transform.position).z;
             mOffset = gameObject.transform.position - GetMouseWorldPos();
-            PieceValueController.isPickedUp = true;
+            isPickedUp = true;
             originalPlace = gameObject.transform.position;
         }
     }
@@ -56,7 +88,7 @@ public class DragObject : MonoBehaviour
     {
         if(canPickup == true)
         {
-            PieceValueController.isPickedUp = false;
+            isPickedUp = false;
             if (canPlace == false)
             {
                 Debug.Log(originalPlace);
@@ -65,7 +97,7 @@ public class DragObject : MonoBehaviour
             else
             {
                 gameObject.transform.position = ghostPiece.transform.position;
-                GameBoardController.updateBoardData();
+                GameBoardController.updateBoardData(isBlack);
                 canPickup = false;
             }
         }
