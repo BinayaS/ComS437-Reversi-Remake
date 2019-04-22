@@ -14,14 +14,17 @@ public class DragObject : MonoBehaviour
     public Rigidbody rb;
     public static Vector3 placingLocation;
     private float setHeight = -10f;
+    public static GameObject self;
 
     public Animator anim;
     public static bool isPickedUp = false;
     public bool isBlack;
     public bool setWhite = false;
+    public bool addToArray = false;
 
     void Start()
     {
+        self = gameObject;
         ghostPiece.transform.position = new Vector3(0f, setHeight, 0f);
         physicsCollider = GetComponent<MeshCollider>();
         rb = GetComponent<Rigidbody>();
@@ -36,6 +39,11 @@ public class DragObject : MonoBehaviour
             isBlack = true;
         }
         anim.SetBool("isBlack", isBlack);
+
+        if(addToArray)
+        {
+            GameBoardController.pieceArray.Add(new Vector2(gameObject.transform.position.z, gameObject.transform.position.x), this);
+        }
     }
 
     void Update()
@@ -97,10 +105,12 @@ public class DragObject : MonoBehaviour
             else
             {
                 gameObject.transform.position = ghostPiece.transform.position;
-                GameBoardController.isPlayerTurn = false;
+                GameBoardController.pieceArray.Add(new Vector2(gameObject.transform.position.z, gameObject.transform.position.x), this);
+                //GameBoardController.isPlayerTurn = false;
+                //GameBoardController.BoardDataUpdated = false;
                 GameBoardController.updateBoardData(isBlack);
                 canPickup = false;
-                GameBoardController.removeValidMoveGhosts();
+                //GameBoardController.removeValidMoveGhosts();
             }
         }
         ghostPiece.transform.position = new Vector3(0f, setHeight, 0f);

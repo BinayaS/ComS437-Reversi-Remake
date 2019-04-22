@@ -75,6 +75,7 @@
     <Compile Include="Assets\Scripts\GameScripts\IfBelowFloor.cs" />
     <Compile Include="Assets\Scripts\GameScripts\PieceValueController.cs" />
     <Compile Include="Assets\Scripts\MinMaxScripts\MinMax.cs" />
+    <Compile Include="Assets\Scripts\MinMaxScripts\Node.cs" />
     <None Include="Assets\SampleScenes\Shaders\Skybox-Procedural.shader" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Personal_Work/Unity/ComS437Reversi/ComS437Reversei/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
