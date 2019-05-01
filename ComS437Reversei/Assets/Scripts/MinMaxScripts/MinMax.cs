@@ -476,6 +476,7 @@ public class MinMax : MonoBehaviour
     {
         if(GameBoardController.isPlayerTurn == false && GameBoardController.BoardDataUpdated == true)
         {
+            Debug.Log("AI TURN");
             //TODO: 
             //Create Tree
             Node a = new Node
@@ -489,7 +490,6 @@ public class MinMax : MonoBehaviour
             }
 
             //Do min max
-
 
             //Make turn
 

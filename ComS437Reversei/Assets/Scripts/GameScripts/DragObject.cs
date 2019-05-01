@@ -110,7 +110,6 @@ public class DragObject : MonoBehaviour
                 GameBoardController.BoardDataUpdated = false;
                 GameBoardController.updateBoardData(isBlack);
                 canPickup = false;
-                GameBoardController.removeValidMoveGhosts();
             }
         }
         ghostPiece.transform.position = new Vector3(0f, setHeight, 0f);

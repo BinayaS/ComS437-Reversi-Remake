@@ -93,6 +93,7 @@ public class GameBoardController : MonoBehaviour
             boardData[a[0, 0], a[0, 1]] = 1;
         }
 
+        removeBoardValidMoves(boardData);
         BoardLogic(a[0, 0], a[0, 1], MinMax.PlayerColor);
 
         //boardData = MinMax.FindValidMoves(MinMax.PlayerColor, boardData);
@@ -222,7 +223,6 @@ public class GameBoardController : MonoBehaviour
             currentCol--;
             currentRow++;
         }
-
         BoardDataUpdated = true;
     }
 
@@ -246,6 +246,16 @@ public class GameBoardController : MonoBehaviour
                 tempPiece.isBlack = true;
             }
 
+        }
+    }
+
+    public static void removeBoardValidMoves(int[,] currentBoardData) {
+        for (int i = 0; i <= 7; i++) {
+            for (int j = 0; j <= 7; j++) {
+                if(currentBoardData[i,j] == 2 || currentBoardData[i,j] == 3) {
+                    currentBoardData[i, j] = 0;
+                }
+            }
         }
     }
 
@@ -274,6 +284,7 @@ public class GameBoardController : MonoBehaviour
                 {
                     float[,] temp = TranslateToGameData(i, j);
                     Instantiate(validMovePoint, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
+                    Debug.Log(i + "," + j);
                 } else if(boardData[i, j] == 3)
                 {
                     float[,] temp = TranslateToGameData(i, j);
