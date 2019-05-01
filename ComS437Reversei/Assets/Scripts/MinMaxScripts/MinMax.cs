@@ -7,7 +7,7 @@ public class MinMax : MonoBehaviour
     //Set player to black
     public static int PlayerColor = -1;
     public static int AIColor = 1;
-    public int AIDifficulty = 2;
+    public static int AIDifficulty = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -450,27 +450,6 @@ public class MinMax : MonoBehaviour
         return tempBD;
     }
 
-
-    public int DoMinMax(Node n, int depth, bool maximizingPlayer)
-    {
-        /*
-        function minimax(node, depth, maximizingPlayer) is
-        if depth = 0 or node is a terminal node then
-            return the heuristic value of node
-        if maximizingPlayer then
-            value := −∞
-            for each child of node do
-                value:= max(value, minimax(child, depth − 1, FALSE))
-            return value
-        else (*minimizing player *)
-            value:= +∞
-            for each child of node do
-                value:= min(value, minimax(child, depth − 1, TRUE))
-            return value
-        */
-        return -1;
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -478,25 +457,16 @@ public class MinMax : MonoBehaviour
         {
             Debug.Log("AI TURN");
             //TODO: 
-            //Create Tree
-            Node a = new Node
-            {
-                myBoardData = GameBoardController.boardData
-            };
-            a.Simulate(true, AIDifficulty);
-            for(int i = 0; i < a.children.Count; i++)
-            {
-                Debug.Log(a.children[i].depth);
-            }
+            //Create Tree & do min max & make turn
 
-            //Do min max
-
-            //Make turn
+            Node a = new Node();
+            System.Array.Copy(GameBoardController.boardData, a.myBoardData, GameBoardController.boardData.GetLength(0) * GameBoardController.boardData.GetLength(1));
+            a.Simulate(true, AIDifficulty, true);
 
             //Set back to player's turn
             GameBoardController.isPlayerTurn = true;
             GameBoardController.showVM = true;
-
+            Debug.Log("End AI Turn");
         }
     }
 }
