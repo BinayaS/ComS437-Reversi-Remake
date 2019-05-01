@@ -7,7 +7,7 @@ public class MinMax : MonoBehaviour
     //Set player to black
     public static int PlayerColor = -1;
     public static int AIColor = 1;
-    public int AIDifficulty = 5;
+    public int AIDifficulty = 2;
 
     // Start is called before the first frame update
     void Start()
@@ -478,15 +478,25 @@ public class MinMax : MonoBehaviour
         {
             //TODO: 
             //Create Tree
-            Node a = new Node();
-            a.myBoardData = GameBoardController.boardData;
-            //a.Simulate(true, AIDifficulty);
+            Node a = new Node
+            {
+                myBoardData = GameBoardController.boardData
+            };
+            a.Simulate(true, AIDifficulty);
+            for(int i = 0; i < a.children.Count; i++)
+            {
+                Debug.Log(a.children[i].depth);
+            }
 
             //Do min max
 
 
             //Make turn
+
             //Set back to player's turn
+            GameBoardController.isPlayerTurn = true;
+            GameBoardController.showVM = true;
+
         }
     }
 }

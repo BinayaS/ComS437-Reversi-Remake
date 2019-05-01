@@ -14,7 +14,7 @@ public class GameBoardController : MonoBehaviour
     public GameObject validAIMovePoint;
     public static Vector3 boardOffset = new Vector3(-4.0f, 1.5f, -4.0f);
     public static Vector3 pieceOffset = new Vector3(0.0f, 0.5f, 0.0f);
-    private static bool showVM = false;
+    public static bool showVM = false;
     public static bool isPlayerTurn = true;
     public static bool BoardDataUpdated = true;
     public static Hashtable pieceArray = new Hashtable();
@@ -95,7 +95,7 @@ public class GameBoardController : MonoBehaviour
 
         BoardLogic(a[0, 0], a[0, 1], MinMax.PlayerColor);
 
-        boardData = MinMax.FindValidMoves(MinMax.PlayerColor, boardData);
+        //boardData = MinMax.FindValidMoves(MinMax.PlayerColor, boardData);
         showVM = true;
     }
 
@@ -231,9 +231,9 @@ public class GameBoardController : MonoBehaviour
         if (boardData[currentRow, currentCol] == color * -1)
         {
             boardData[currentRow, currentCol] = color;
-            Debug.Log(currentRow + ":" + currentCol);
-            Debug.Log(TranslateToGameData(currentRow, currentCol)[0, 0] + ":" + TranslateToGameData(currentRow, currentCol)[0, 1]);
-            Debug.Log(pieceArray[new Vector2(TranslateToGameData(currentRow, currentCol)[0, 0], TranslateToGameData(currentRow, currentCol)[0, 1])]);
+            //Debug.Log(currentRow + ":" + currentCol);
+            //Debug.Log(TranslateToGameData(currentRow, currentCol)[0, 0] + ":" + TranslateToGameData(currentRow, currentCol)[0, 1]);
+            //Debug.Log(pieceArray[new Vector2(TranslateToGameData(currentRow, currentCol)[0, 0], TranslateToGameData(currentRow, currentCol)[0, 1])]);
             var tempPiece = (DragObject)pieceArray[new Vector2(TranslateToGameData(currentRow, currentCol)[0, 0], TranslateToGameData(currentRow, currentCol)[0, 1])];
             if (tempPiece.anim.GetBool("isBlack"))
             {
@@ -313,6 +313,8 @@ public class GameBoardController : MonoBehaviour
 
         if(showVM && isPlayerTurn)
         {
+            Debug.Log("SHOW");
+            boardData = MinMax.FindValidMoves(MinMax.PlayerColor, boardData);
             showValidMoves(MinMax.PlayerColor, true);
             showVM = false;
             //MinMax.FindValidMoves(MinMax.AIColor);

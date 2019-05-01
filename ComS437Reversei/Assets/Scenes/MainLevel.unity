@@ -1503,6 +1503,7 @@ GameObject:
   - component: {fileID: 461949696}
   - component: {fileID: 461949695}
   - component: {fileID: 461949699}
+  - component: {fileID: 461949700}
   m_Layer: 0
   m_Name: Model_Board
   m_TagString: Non_Placeable
@@ -1607,6 +1608,19 @@ MonoBehaviour:
     type: 3}
   validAIMovePoint: {fileID: 9134185370691675172, guid: 6204525495ae1ce40aba9dfeee2c585f,
     type: 3}
+--- !u!114 &461949700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 461949694}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd1e3e04478efd94da3e5138e0f67a27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AIDifficulty: 2
 --- !u!1001 &477483287
 PrefabInstance:
   m_ObjectHideFlags: 0
