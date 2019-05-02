@@ -23,16 +23,6 @@ public class Node
         if(isAI)
         {
             myBoardData = MinMax.FindValidMoves(MinMax.AIColor, myBoardData);
-            
-            /*
-            for (int i = 0; i <= 7; i++)
-            {
-                for (int j = 0; j <= 7; j++)
-                {
-                    Debug.Log(i + ":" + j + " = " + myBoardData[i, j]);
-                }
-            }
-            */
             CreateChildren(MinMax.AIColor, isAI);
 
         } else
@@ -53,13 +43,13 @@ public class Node
         if(this.depth == MinMax.AIDifficulty)
         {
             //Do min max
-            int searchVal = DoMinMax(this, MinMax.AIDifficulty - 1, true);
-            //Debug.Log(searchVal);
+            int searchVal = DoMinMax(this, MinMax.AIDifficulty, true);
+            Debug.Log("SearchVal" + searchVal);
             for(int i = 0; i < children.Count; i++)
             {
                 if(children[i].value == searchVal)
                 {
-                    Debug.Log(children[i].moveX + ":" + children[i].moveY);
+                    Debug.Log("AI played: " + children[i].moveX + "," + children[i].moveY);
                     GameBoardController.AIMoveX = children[i].moveX;
                     GameBoardController.AIMoveY = children[i].moveY;
                     break;
@@ -72,21 +62,6 @@ public class Node
 
     public int DoMinMax(Node n, int depth, bool maximaizingPlayer)
     {
-        /*
-        function minimax(node, depth, maximizingPlayer) is
-        if depth = 0 or node is a terminal node then
-            return the heuristic value of node
-        if maximizingPlayer then
-            value := −∞
-            for each child of node do
-                value:= max(value, minimax(child, depth − 1, FALSE))
-            return value
-        else (*minimizing player *)
-            value:= +∞
-            for each child of node do
-                value:= min(value, minimax(child, depth − 1, TRUE))
-            return value
-        */
 
         if(depth == 0 || n.children.Count < 0)
         {
@@ -96,7 +71,7 @@ public class Node
         if(maximaizingPlayer)
         {
             int myValue = int.MinValue;
-            for(int i = 0; i < n.children.Count; i++)
+            for(int i = 0; i < n.children.Count-1; i++)
             {
                 myValue = Mathf.Max(myValue, DoMinMax(n.children[i], depth - 1, false));
             }
@@ -104,7 +79,7 @@ public class Node
         } else
         {
             int myValue = int.MaxValue;
-            for (int i = 0; i < n.children.Count; i++)
+            for (int i = 0; i < n.children.Count-1; i++)
             {
                 myValue = Mathf.Min(myValue, DoMinMax(n.children[i], depth - 1, true));
             }

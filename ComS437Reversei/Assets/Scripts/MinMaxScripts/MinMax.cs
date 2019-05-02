@@ -7,7 +7,7 @@ public class MinMax : MonoBehaviour
     //Set player to black
     public static int PlayerColor = -1;
     public static int AIColor = 1;
-    public static int AIDifficulty = 2;
+    public static int AIDifficulty = 1;
 
     // Start is called before the first frame update
     void Start()
