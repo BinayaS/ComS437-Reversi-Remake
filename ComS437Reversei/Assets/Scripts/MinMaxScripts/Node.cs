@@ -44,15 +44,34 @@ public class Node
         {
             //Do min max
             int searchVal = DoMinMax(this, MinMax.AIDifficulty, true);
+            bool foundMove = false;
             Debug.Log("SearchVal" + searchVal);
             for(int i = 0; i < children.Count; i++)
             {
+                //Debug.Log("X: " + children[i].moveX + " Y: " + children[i].moveY +  " = " + children[i].value);
                 if(children[i].value == searchVal)
                 {
                     Debug.Log("AI played: " + children[i].moveX + "," + children[i].moveY);
                     GameBoardController.AIMoveX = children[i].moveX;
                     GameBoardController.AIMoveY = children[i].moveY;
+                    foundMove = true;
                     break;
+                }
+            }
+            if(!foundMove) {
+                for(int i = 0; i < children.Count; i++) {
+                    for(int j = 0; j < children[i].children.Count; j++) {
+                        if (children[i].children[j].value == searchVal) {
+                            Debug.Log("AI played: " + children[i].moveX + "," + children[i].moveY);
+                            GameBoardController.AIMoveX = children[i].moveX;
+                            GameBoardController.AIMoveY = children[i].moveY;
+                            foundMove = true;
+                            break;
+                        }
+                    }
+                    if(foundMove) {
+                        break;
+                    }
                 }
             }
             return;
@@ -63,7 +82,7 @@ public class Node
     public int DoMinMax(Node n, int depth, bool maximaizingPlayer)
     {
 
-        if(depth == 0 || n.children.Count < 0)
+        if (depth == 0 || n.children.Count < 0)
         {
             //Debug.Log(n.moveX + "," + n.moveY + ": " + n.value);
             return n.value;
@@ -71,17 +90,35 @@ public class Node
         if(maximaizingPlayer)
         {
             int myValue = int.MinValue;
-            for(int i = 0; i < n.children.Count-1; i++)
+            for(int i = 0; i < n.children.Count; i++)
             {
-                myValue = Mathf.Max(myValue, DoMinMax(n.children[i], depth - 1, false));
+                int minMaxVal = DoMinMax(n.children[i], depth - 1, false);
+                myValue = Mathf.Max(myValue, minMaxVal);
+                //Debug.Log("MAX - X: " + n.children[i].moveX + " Y: " + n.children[i].moveY + " = " + n.children[i].value);
+                /*
+                if (depth == MinMax.AIDifficulty && myValue == minMaxVal) {
+                    Debug.Log("AI played: " + n.children[i].moveX + "," + n.children[i].moveY);
+                    GameBoardController.AIMoveX = n.children[i].moveX;
+                    GameBoardController.AIMoveY = n.children[i].moveY;
+                }
+                */
             }
             return myValue;
         } else
         {
             int myValue = int.MaxValue;
-            for (int i = 0; i < n.children.Count-1; i++)
+            for (int i = 0; i < n.children.Count; i++)
             {
-                myValue = Mathf.Min(myValue, DoMinMax(n.children[i], depth - 1, true));
+                int minMaxVal = DoMinMax(n.children[i], depth - 1, true);
+                myValue = Mathf.Min(myValue, minMaxVal);
+                //Debug.Log("MIN - X: " + n.children[i].moveX + " Y: " + n.children[i].moveY + " = " + n.children[i].value);
+                /*
+                if (depth == MinMax.AIDifficulty && myValue == minMaxVal) {
+                    Debug.Log("AI played: " + n.children[i].moveX + "," + n.children[i].moveY);
+                    GameBoardController.AIMoveX = n.children[i].moveX;
+                    GameBoardController.AIMoveY = n.children[i].moveY;
+                }
+                */
             }
             return myValue;
         }
@@ -186,7 +223,7 @@ public class Node
                     {
                         Node temp = new Node();
                         int[,] tempBD = new int[8, 8];
-                        tempBD = myBoardData;
+                        System.Array.Copy(myBoardData, tempBD, myBoardData.GetLength(0) * myBoardData.GetLength(1));
                         tempBD[row, col] = MinMax.PlayerColor;
                         //tempBD = ClearBoardData(tempBD);
                         temp.myBoardData = tempBD;
@@ -204,7 +241,7 @@ public class Node
                         //Debug.Log(row + ":" + col);
                         Node temp = new Node();
                         int[,] tempBD = new int[8,8];
-                        tempBD = myBoardData;
+                        System.Array.Copy(myBoardData, tempBD, myBoardData.GetLength(0) * myBoardData.GetLength(1));
                         tempBD[row, col] = MinMax.AIColor;
                         //tempBD = ClearBoardData(tempBD);
                         temp.myBoardData = tempBD;

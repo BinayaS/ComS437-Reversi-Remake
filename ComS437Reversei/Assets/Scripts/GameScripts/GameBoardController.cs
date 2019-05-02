@@ -21,6 +21,8 @@ public class GameBoardController : MonoBehaviour
     public static bool BoardDataUpdated = true;
     public static Hashtable pieceArray = new Hashtable();
     public GameObject piece;
+    public int AITimerDuration = 80;
+    public int AITimer = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -120,7 +122,9 @@ public class GameBoardController : MonoBehaviour
                 foundSameColor = true;
                 break;
             }
-            
+            if (boardData[currentRow, currentCol] == 0) {
+                break;
+            }
             currentRow--;
         }
         if(foundSameColor)
@@ -143,6 +147,9 @@ public class GameBoardController : MonoBehaviour
             if (boardData[currentRow, currentCol] == color)
             {
                 foundSameColor = true;
+                break;
+            }
+            if (boardData[currentRow, currentCol] == 0) {
                 break;
             }
             currentRow++;
@@ -169,6 +176,9 @@ public class GameBoardController : MonoBehaviour
                 foundSameColor = true;
                 break;
             }
+            if (boardData[currentRow, currentCol] == 0) {
+                break;
+            }
             currentCol--;
         }
         if (foundSameColor)
@@ -189,6 +199,9 @@ public class GameBoardController : MonoBehaviour
             if (boardData[currentRow, currentCol] == color)
             {
                 foundSameColor = true;
+                break;
+            }
+            if (boardData[currentRow, currentCol] == 0) {
                 break;
             }
             currentCol++;
@@ -213,6 +226,9 @@ public class GameBoardController : MonoBehaviour
             if (boardData[currentRow, currentCol] == color)
             {
                 foundSameColor = true;
+                break;
+            }
+            if (boardData[currentRow, currentCol] == 0) {
                 break;
             }
             currentCol++;
@@ -241,6 +257,9 @@ public class GameBoardController : MonoBehaviour
                 foundSameColor = true;
                 break;
             }
+            if(boardData[currentRow, currentCol] == 0) {
+                break;
+            }
             currentCol++;
             currentRow++;
         }
@@ -267,7 +286,9 @@ public class GameBoardController : MonoBehaviour
                 foundSameColor = true;
                 break;
             }
-            updatePieceColor(currentRow, currentCol, color);
+            if (boardData[currentRow, currentCol] == 0) {
+                break;
+            }
             currentCol--;
             currentRow--;
         }
@@ -292,6 +313,9 @@ public class GameBoardController : MonoBehaviour
             if (boardData[currentRow, currentCol] == color)
             {
                 foundSameColor = true;
+                break;
+            }
+            if (boardData[currentRow, currentCol] == 0) {
                 break;
             }
             currentCol--;
@@ -425,22 +449,26 @@ public class GameBoardController : MonoBehaviour
 
         if(AIMoveX != -1 && AIMoveY != -1)
         {
-            float[,] temp = TranslateToGameData(AIMoveX, AIMoveY);
-            GameObject tempPiece = Instantiate(piece, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
-            pieceArray.Add(new Vector2(tempPiece.gameObject.transform.position.x, tempPiece.gameObject.transform.position.z), tempPiece.gameObject);
-            //Debug.Log(tempPiece.transform.position.z + ":" + tempPiece.transform.position.x);
-            boardData[AIMoveX, AIMoveY] = MinMax.AIColor;
-            pieceRefrences[AIMoveX, AIMoveY] = tempPiece;
-            removeBoardValidMoves(boardData);
+            AITimer++;
+            if(AITimer > AITimerDuration) {
+                float[,] temp = TranslateToGameData(AIMoveX, AIMoveY);
+                GameObject tempPiece = Instantiate(piece, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
+                pieceArray.Add(new Vector2(tempPiece.gameObject.transform.position.x, tempPiece.gameObject.transform.position.z), tempPiece.gameObject);
+                //Debug.Log(tempPiece.transform.position.z + ":" + tempPiece.transform.position.x);
+                boardData[AIMoveX, AIMoveY] = MinMax.AIColor;
+                pieceRefrences[AIMoveX, AIMoveY] = tempPiece;
+                removeBoardValidMoves(boardData);
 
-            BoardLogic(AIMoveX, AIMoveY, MinMax.AIColor);
-            
-            
-            
-            AIMoveX = -1;
-            AIMoveY = -1;
-            isPlayerTurn = true;
-            showVM = true;
+                BoardLogic(AIMoveX, AIMoveY, MinMax.AIColor);
+
+
+
+                AIMoveX = -1;
+                AIMoveY = -1;
+                isPlayerTurn = true;
+                showVM = true;
+                AITimer = 0;
+            }
         }
     }
 }
