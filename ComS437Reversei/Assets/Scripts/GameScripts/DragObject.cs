@@ -42,7 +42,11 @@ public class DragObject : MonoBehaviour
 
         if(addToArray)
         {
-            GameBoardController.pieceArray.Add(new Vector2(gameObject.transform.position.x, gameObject.transform.position.z), gameObject);
+            Vector2 A = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
+            if (GameBoardController.pieceArray.Contains(A)) {
+                GameBoardController.pieceArray.Remove(A);
+            }
+            GameBoardController.pieceArray.Add(A, gameObject);
         }
     }
 
@@ -106,7 +110,11 @@ public class DragObject : MonoBehaviour
             {
                 GameBoardController.gamePieces++;
                 gameObject.transform.position = ghostPiece.transform.position;
-                GameBoardController.pieceArray.Add(new Vector2(gameObject.transform.position.x, gameObject.transform.position.z), gameObject);
+                Vector2 A = new Vector2(gameObject.transform.position.x, gameObject.transform.position.z);
+                if(GameBoardController.pieceArray.Contains(A)) {
+                    GameBoardController.pieceArray.Remove(A);
+                }
+                GameBoardController.pieceArray.Add(A, gameObject);
                 GameBoardController.BoardDataUpdated = false;
                 GameBoardController.isPlayerTurn = false;
                 GameBoardController.updateBoardData(isBlack);

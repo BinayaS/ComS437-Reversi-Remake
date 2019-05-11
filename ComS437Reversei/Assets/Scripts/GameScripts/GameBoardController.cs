@@ -411,10 +411,9 @@ public class GameBoardController : MonoBehaviour
                 }
             }
         }
-        if(foundValidMove == false) {
-            isPlayerTurn = false;
-            BoardDataUpdated = true;
-        }
+        //if(foundValidMove == false) {
+        //    gameOver = true;
+        //}
     }
 
     public void findNumberOfPieces() {
@@ -468,7 +467,12 @@ public class GameBoardController : MonoBehaviour
                 float[,] temp = TranslateToGameData(AIMoveX, AIMoveY);
                 GameObject tempPiece = Instantiate(piece, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
                 showAIMove.transform.position = new Vector3(temp[0, 0], 2.1f, temp[0, 1]);
-                pieceArray.Add(new Vector2(tempPiece.gameObject.transform.position.x, tempPiece.gameObject.transform.position.z), tempPiece.gameObject);
+                Vector2 A = new Vector2(tempPiece.gameObject.transform.position.x, tempPiece.gameObject.transform.position.z);
+                if (pieceArray.ContainsKey(A)) {
+                    pieceArray.Remove(A);
+
+                }
+                pieceArray.Add(A, tempPiece.gameObject);
                 gamePieces++;
                 //Debug.Log(tempPiece.transform.position.z + ":" + tempPiece.transform.position.x);
                 boardData[AIMoveX, AIMoveY] = MinMax.AIColor;
@@ -489,8 +493,12 @@ public class GameBoardController : MonoBehaviour
         }
 
         if(gamePieces == maxGamePieces && gameOver == false) {
-            gameOver = true;
-            
+            gameOver = true;   
+        }
+
+        if (Input.GetKey("escape")) {
+            UnityEditor.EditorApplication.isPlaying = false;
+            Application.Quit();
         }
     }
 }

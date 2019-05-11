@@ -10,12 +10,6 @@ public class MinMax : MonoBehaviour
     public static int AIDifficulty = 1;
     public static bool AITurn = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     public static int[,] FindValidMoves(int color, int[,] boardData)
     {
         int[,] tempBD = boardData;
@@ -464,7 +458,7 @@ public class MinMax : MonoBehaviour
             Node a = new Node();
             System.Array.Copy(GameBoardController.boardData, a.myBoardData, GameBoardController.boardData.GetLength(0) * GameBoardController.boardData.GetLength(1));
             Debug.Log("Simulate Start");
-            a.Simulate(true, AIDifficulty, true, 0);
+            a.Simulate(true, 1, true, 0, a);
             Debug.Log("Simulate Done");
 
             //Set back to player's turn

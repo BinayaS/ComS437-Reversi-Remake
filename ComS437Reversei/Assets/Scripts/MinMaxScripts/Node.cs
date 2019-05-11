@@ -14,7 +14,7 @@ public class Node
     public int moveX = -1;
     public int moveY = -1;
 
-    public void Simulate(bool isAI, int depth, bool isMax, int number)
+    public void Simulate(bool isAI, int depth, bool isMax, int number, Node startNode)
     {
         this.isAI = isAI;
         this.isMax = isMax;
@@ -40,30 +40,26 @@ public class Node
             for (int i = 0; i < children.Count; i++)
             {
                 //Debug.Log("I: " + i);
-                children[i].Simulate(!isAI, depth - 1, !isMax, number);
+                children[i].Simulate(!isAI, depth - 1, !isMax, number, startNode);
             }
         }
 
         //Debug.Log("Ended Creation");
 
-        if(this.depth == MinMax.AIDifficulty)
+        if(this.depth >= 1)
         {
             //Do min max
             //Debug.Log("DOING MIN MAX");
             Debug.Log("Do Min Max");
             int searchVal = ADoMinMax(this, MinMax.AIDifficulty, true);
-            int count = 0;
-            while(searchVal == int.MaxValue || searchVal == int.MinValue && count < 10) {
-                searchVal = ADoMinMax(this, MinMax.AIDifficulty, true);
-                Debug.Log("Searching again : " + count);
-                count++;
-            }
             if (searchVal == int.MaxValue || searchVal == int.MinValue) {
                 Debug.Log("No Valid Moves Found");
-                MinMax.AITurn = false;
+                MinMax.AITurn = true;
+                GameBoardController.gameOver = true;
             }
             Debug.Log("SearchVal" + searchVal);
             bool foundMove = false;
+            int searchValStart = searchVal;
             while(foundMove == false) {
                 for (int i = 0; i < children.Count; i++) {
                     Debug.Log("X: " + children[i].moveX + " Y: " + children[i].moveY + " = " + children[i].value);
@@ -81,7 +77,10 @@ public class Node
                 } else {
                     searchVal = 5;
                 }
-
+                if(searchVal == searchValStart) {
+                    GameBoardController.gameOver = true;
+                    break;
+                }
             }
             
             return;
@@ -160,7 +159,7 @@ public class Node
         }
     }
 
-    public int Getvalue(int x, int y, bool isAITurn)
+    public int Getvalue(int x, int y, bool isAITurn, int difficulty)
     {
         if(isAITurn)
         {
@@ -170,7 +169,19 @@ public class Node
                 y >= 2 && y <= 5 && x == 0 ||
                 y >= 2 && y <= 5 && x == 7)
             {
-                return 5;
+                switch(difficulty) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 6;
+                    case 4:
+                        return 8;
+                    case 5:
+                        return 10;
+                }
+                
             }
 
             //Corners
@@ -179,7 +190,18 @@ public class Node
                x == 0 && y == 7 ||
                x == 7 && y == 7)
             {
-                return 5;
+                switch (difficulty) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 6;
+                    case 4:
+                        return 8;
+                    case 5:
+                        return 10;
+                }
             }
 
             //One out from corner
@@ -188,7 +210,18 @@ public class Node
                x >= 6 && x <= 7 && y >= 0 && y <= 1 ||
                x >= 6 && x <= 7 && y >= 6 && y <= 7)
             {
-                return 1;
+                switch (difficulty) {
+                    case 1:
+                        return 5;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 3;
+                    case 4:
+                        return 2;
+                    case 5:
+                        return 1;
+                }
             }
             
             //One out from edge
@@ -197,11 +230,35 @@ public class Node
                x >= 2 && x <= 5 && y == 1 ||
                x >= 2 && x <= 5 && y == 6)
             {
-                return 1;
+                switch (difficulty) {
+                    case 1:
+                        return 5;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 3;
+                    case 4:
+                        return 2;
+                    case 5:
+                        return 1;
+                }
             }
 
             //Middle tiles
-            return 3;
+            switch (difficulty) {
+                case 1:
+                    return 3;
+                case 2:
+                    return 4;
+                case 3:
+                    return 5;
+                case 4:
+                    return 6;
+                case 5:
+                    return 7;
+                default:
+                    return 3;
+            }
 
         } else
         {
@@ -211,7 +268,18 @@ public class Node
                 y >= 2 && y <= 5 && x == 0 ||
                 y >= 2 && y <= 5 && x == 7)
             {
-                return 1;
+                switch (difficulty) {
+                    case 1:
+                        return 5;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 3;
+                    case 4:
+                        return 2;
+                    case 5:
+                        return 1;
+                }
             }
 
             //Corners
@@ -220,7 +288,18 @@ public class Node
                x == 0 && y == 7 ||
                x == 7 && y == 7)
             {
-                return 1;
+                switch (difficulty) {
+                    case 1:
+                        return 5;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 3;
+                    case 4:
+                        return 2;
+                    case 5:
+                        return 1;
+                }
             }
 
             //One out from corner
@@ -229,7 +308,18 @@ public class Node
                x >= 6 && x <= 7 && y >= 0 && y <= 1 ||
                x >= 6 && x <= 7 && y >= 6 && y <= 7)
             {
-                return 5;
+                switch (difficulty) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 6;
+                    case 4:
+                        return 8;
+                    case 5:
+                        return 10;
+                }
             }
 
             //One out from edge
@@ -238,11 +328,35 @@ public class Node
                x >= 2 && x <= 5 && y == 1 ||
                x >= 2 && x <= 5 && y == 6)
             {
-                return 5;
+                switch (difficulty) {
+                    case 1:
+                        return 2;
+                    case 2:
+                        return 4;
+                    case 3:
+                        return 6;
+                    case 4:
+                        return 8;
+                    case 5:
+                        return 10;
+                }
             }
 
             //Middle tiles
-            return 3;
+            switch (difficulty) {
+                case 1:
+                    return 3;
+                case 2:
+                    return 4;
+                case 3:
+                    return 5;
+                case 4:
+                    return 6;
+                case 5:
+                    return 7;
+                default:
+                    return 3;
+            }
         }
     }
 
@@ -264,7 +378,7 @@ public class Node
                         //tempBD = ClearBoardData(tempBD);
                         temp.myBoardData = tempBD;
                         temp.parent = this;
-                        temp.value = temp.Getvalue(row, col, isAITurn);
+                        temp.value = temp.Getvalue(row, col, isAITurn, MinMax.AIDifficulty);
                         temp.moveX = row;
                         temp.moveY = col;
                         children.Add(temp);
@@ -281,7 +395,7 @@ public class Node
                         //tempBD = ClearBoardData(tempBD);
                         temp.myBoardData = tempBD;
                         temp.parent = this;
-                        temp.value = temp.Getvalue(row, col, isAITurn);
+                        temp.value = temp.Getvalue(row, col, isAITurn, MinMax.AIDifficulty);
                         temp.moveX = row;
                         temp.moveY = col;
                         children.Add(temp);
