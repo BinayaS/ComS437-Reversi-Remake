@@ -104,13 +104,14 @@ public class DragObject : MonoBehaviour
             }
             else
             {
+                GameBoardController.gamePieces++;
                 gameObject.transform.position = ghostPiece.transform.position;
                 GameBoardController.pieceArray.Add(new Vector2(gameObject.transform.position.x, gameObject.transform.position.z), gameObject);
                 GameBoardController.BoardDataUpdated = false;
                 GameBoardController.isPlayerTurn = false;
                 GameBoardController.updateBoardData(isBlack);
                 canPickup = false;
-                GameObject a = Instantiate(gameObject, new Vector3(-3f, 1.1f, -5f), Quaternion.identity);
+                GameObject a = Instantiate(gameObject, new Vector3(-3f, 1.1f, -6f), Quaternion.identity);
                 a.GetComponent<DragObject>().canPickup = true;
                 //Debug.Log("MOUSE UP");
             }

@@ -12,6 +12,7 @@ public class GameBoardController : MonoBehaviour
     public GameObject point_00;
     public GameObject validMovePoint;
     public GameObject validAIMovePoint;
+    public GameObject showAIMove;
     public static Vector3 boardOffset = new Vector3(-4.0f, 1.5f, -4.0f);
     public static Vector3 pieceOffset = new Vector3(0.0f, 0.5f, 0.0f);
     public static bool showVM = false;
@@ -21,8 +22,14 @@ public class GameBoardController : MonoBehaviour
     public static bool BoardDataUpdated = true;
     public static Hashtable pieceArray = new Hashtable();
     public GameObject piece;
-    public int AITimerDuration = 80;
+    public int AITimerDuration = 40;
     public int AITimer = 0;
+    public static int gamePieces = 4;
+    public static int maxGamePieces = 64;
+    public static bool gameOver = false;
+    public static int blackPieces = 2;
+    public static int whitePieces = 2;
+    public static Node MoveNode = new Node();
 
     // Start is called before the first frame update
     void Start()
@@ -63,7 +70,7 @@ public class GameBoardController : MonoBehaviour
 
     public bool isValidMove(int x, int y)
     {
-        if (boardData[x, y] == 2)
+        if (x >= 0 && x <= 8 && y >= 0 && y <= 8 && boardData[x, y] == 2)
         {
             return true;
         }
@@ -344,17 +351,16 @@ public class GameBoardController : MonoBehaviour
             //Debug.Log(TranslateToGameData(currentRow, currentCol)[0, 0] + ":" + TranslateToGameData(currentRow, currentCol)[0, 1]);
             //Debug.Log(pieceArray[new Vector2(TranslateToGameData(currentRow, currentCol)[0, 0], TranslateToGameData(currentRow, currentCol)[0, 1])]);
             var tempPiece = (GameObject)pieceArray[new Vector2(TranslateToGameData(currentRow, currentCol)[0, 0], TranslateToGameData(currentRow, currentCol)[0, 1])];
-            if (tempPiece.GetComponent<DragObject>().anim.GetBool("isBlack"))
-            {
-                tempPiece.GetComponent<DragObject>().anim.SetBool("isBlack", false);
-                tempPiece.GetComponent<DragObject>().isBlack = false;
+            if(tempPiece != null) {
+                if (tempPiece.GetComponent<DragObject>().anim.GetBool("isBlack")) {
+                    tempPiece.GetComponent<DragObject>().anim.SetBool("isBlack", false);
+                    tempPiece.GetComponent<DragObject>().isBlack = false;
+                }
+                else {
+                    tempPiece.GetComponent<DragObject>().anim.SetBool("isBlack", true);
+                    tempPiece.GetComponent<DragObject>().isBlack = true;
+                }
             }
-            else
-            {
-                tempPiece.GetComponent<DragObject>().anim.SetBool("isBlack", true);
-                tempPiece.GetComponent<DragObject>().isBlack = true;
-            }
-
         }
     }
 
@@ -379,6 +385,7 @@ public class GameBoardController : MonoBehaviour
 
     public void showValidMoves(int color, bool removePrevious)
     {
+        bool foundValidMove = false;
         //Debug.Log("SHOWING MOVES");
         if(removePrevious)
         {
@@ -393,39 +400,49 @@ public class GameBoardController : MonoBehaviour
                 {
                     float[,] temp = TranslateToGameData(i, j);
                     Instantiate(validMovePoint, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
+                    foundValidMove = true;
                     //Show possible moves
                     //Debug.Log(i + "," + j);
                 } else if(boardData[i, j] == 3)
                 {
                     float[,] temp = TranslateToGameData(i, j);
                     Instantiate(validAIMovePoint, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
+                    foundValidMove = true;
                 }
             }
         }
+        if(foundValidMove == false) {
+            isPlayerTurn = false;
+            BoardDataUpdated = true;
+        }
     }
 
-    public static void placePiece(int x ,int y)
-    {
-        
+    public void findNumberOfPieces() {
+        int black = 0;
+        int white = 0;
+        for (int i = 0; i <= 7; i++) {
+            for (int j = 0; j <= 7; j++) {
+                if (boardData[i, j] == 1) {
+                    white++;
+                }
+                else if(boardData[i,j] == -1) {
+                    black++;
+                }
+            }
+        }
+        whitePieces = white;
+        blackPieces = black;
     }
 
     // Update is called once per frame
     void Update()
     {
+        findNumberOfPieces();
+
         if (DragObject.isPickedUp == true && DragObject.placingLocation != null) {
             var a = TranslateToBoardData(DragObject.placingLocation);
 
-            //Debug.Log(isEmpty(a[0, 0], a[0, 1]));
-            
-            /*
-            if (isEmpty(a[0,0], a[0,1])) {
-                DragObject.canPlace = true;
-            } else {
-                DragObject.canPlace = false;
-            }
-            */
-
-            if (isValidMove(a[0, 0], a[0, 1]) && isPlayerTurn)
+            if (isValidMove(a[0, 0], a[0, 1]) && isPlayerTurn && !MinMax.AITurn)
             {
                 DragObject.canPlace = true;
             }
@@ -439,12 +456,9 @@ public class GameBoardController : MonoBehaviour
 
         if(showVM)
         {
-            //Debug.Log("SHOW");
             boardData = MinMax.FindValidMoves(MinMax.PlayerColor, boardData);
             showValidMoves(MinMax.PlayerColor, true);
             showVM = false;
-            //MinMax.FindValidMoves(MinMax.AIColor);
-            //showValidMoves(MinMax.AIColor, false);
         }
 
         if(AIMoveX != -1 && AIMoveY != -1)
@@ -453,7 +467,9 @@ public class GameBoardController : MonoBehaviour
             if(AITimer > AITimerDuration) {
                 float[,] temp = TranslateToGameData(AIMoveX, AIMoveY);
                 GameObject tempPiece = Instantiate(piece, new Vector3(temp[0, 0], 1.1f, temp[0, 1]), Quaternion.identity);
+                showAIMove.transform.position = new Vector3(temp[0, 0], 2.1f, temp[0, 1]);
                 pieceArray.Add(new Vector2(tempPiece.gameObject.transform.position.x, tempPiece.gameObject.transform.position.z), tempPiece.gameObject);
+                gamePieces++;
                 //Debug.Log(tempPiece.transform.position.z + ":" + tempPiece.transform.position.x);
                 boardData[AIMoveX, AIMoveY] = MinMax.AIColor;
                 pieceRefrences[AIMoveX, AIMoveY] = tempPiece;
@@ -461,14 +477,20 @@ public class GameBoardController : MonoBehaviour
 
                 BoardLogic(AIMoveX, AIMoveY, MinMax.AIColor);
 
-
-
                 AIMoveX = -1;
                 AIMoveY = -1;
                 isPlayerTurn = true;
                 showVM = true;
                 AITimer = 0;
+                MinMax.AITurn = false;
+                Debug.Log("AI Placed Piece");
+                Debug.Log("Game Pieces on Board: " + gamePieces);
             }
+        }
+
+        if(gamePieces == maxGamePieces && gameOver == false) {
+            gameOver = true;
+            
         }
     }
 }

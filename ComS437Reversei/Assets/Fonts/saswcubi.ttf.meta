@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: ae9886b7cea02494d9d99d6a74be8786
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Cumberland AMT
+  fontNames:
+  - Cumberland AMT
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 0a193ed5b7ca09444bc89c4c62c0f768, type: 3}
+  - {fileID: 12800000, guid: 400266abbd0555c4f9cf6371a3780a98, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

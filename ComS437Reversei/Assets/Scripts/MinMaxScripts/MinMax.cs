@@ -8,6 +8,7 @@ public class MinMax : MonoBehaviour
     public static int PlayerColor = -1;
     public static int AIColor = 1;
     public static int AIDifficulty = 1;
+    public static bool AITurn = false;
 
     // Start is called before the first frame update
     void Start()
@@ -456,16 +457,20 @@ public class MinMax : MonoBehaviour
         if(GameBoardController.isPlayerTurn == false && GameBoardController.BoardDataUpdated == true)
         {
             Debug.Log("AI TURN");
+            AITurn = true;
             //TODO: 
             //Create Tree & do min max & make turn
 
             Node a = new Node();
             System.Array.Copy(GameBoardController.boardData, a.myBoardData, GameBoardController.boardData.GetLength(0) * GameBoardController.boardData.GetLength(1));
-            a.Simulate(true, AIDifficulty, true);
+            Debug.Log("Simulate Start");
+            a.Simulate(true, AIDifficulty, true, 0);
+            Debug.Log("Simulate Done");
 
             //Set back to player's turn
             GameBoardController.isPlayerTurn = true;
             GameBoardController.showVM = true;
+            AITurn = false;
             Debug.Log("End AI Turn");
         }
     }

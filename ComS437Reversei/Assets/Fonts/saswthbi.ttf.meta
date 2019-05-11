@@ -1,0 +1,25 @@
+fileFormatVersion: 2
+guid: 63e7e8dfd66809e4cb68f065ebb43fa4
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Thorndale AMT
+  fontNames:
+  - Thorndale AMT
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 54e16a82f0fdb6c469b07cfd14d9d3a9, type: 3}
+  - {fileID: 12800000, guid: 32bb52ea6fe4bbf4eaecf3f0b8acecee, type: 3}
+  - {fileID: 12800000, guid: 51a72afc10105e2469e9af4ec9a46956, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

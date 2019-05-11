@@ -1,0 +1,24 @@
+fileFormatVersion: 2
+guid: 6820183fad7417f48acf7d6b5a64de22
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Avenir Next for SAS
+  fontNames:
+  - Avenir Next for SAS
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 2fe9e2cbffe09c14ea17833ac98cf984, type: 3}
+  - {fileID: 12800000, guid: 4f9b761c1cf9b3741b19ed8bf0ffc980, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
