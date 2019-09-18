@@ -1,7 +1,5 @@
 # ComS437Reversi
 
-A remake of reversi with first person controls.
+A remake of reversi with first person controls. Made using the Unity engine.
 
-Made using the Unity engine.
-
-Still incomplete and buggy.
+This Project is not complete.
